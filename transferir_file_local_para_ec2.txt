@@ -1,0 +1,9 @@
+Comando para transferir arquivos da máquina local para a máquina virtual ec2 AWS Amazon
+
+scp -i /caminho/para/sua_chave.pem -r /caminho/para/seu/diretorio ec2-user@ip_da_sua_instancia:/caminho/para/o/destino
+
+-i /caminho/para/sua_chave.pem especifica o caminho para a sua chave privada.
+-r é usado para copiar diretórios recursivamente.
+/caminho/para/seu/diretorio é o caminho para o diretório que você deseja copiar.
+ec2-user@ip_da_sua_instancia é o nome do usuário e o endereço IP da sua instância EC2.
+/caminho/para/o/destino é o caminho onde você deseja que o diretório seja copiado na instância EC2.

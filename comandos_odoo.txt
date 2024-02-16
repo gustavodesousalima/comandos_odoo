@@ -1,0 +1,83 @@
+sudo apt-get update && sudo apt-get upgrade
+
+sudo apt-get install git python3-pip build-essential wget python3-dev python3-cffi libldap2-dev libsasl2-dev libssl-dev postgresql
+
+mkdir projects
+cd projects
+
+git clone https://www.github.com/odoo/odoo --depth 1 --branch 16.0 --single-branch
+
+
+pip3 install -r odoo/requirements.txt
+
+
+sudo su - postgres
+
+psql
+
+CREATE USER odoo WITH PASSWORD 'odoo';
+
+exit
+
+cd ~/projects
+
+
+sudo cp odoo/debian/odoo.conf /etc/odoo.conf
+
+
+sudo nano /etc/odoo.conf
+
+
+[options]
+; Configurações gerais
+admin_passwd = senha_admin
+db_host = localhost
+db_port = 5432
+db_user = odoo
+db_password = odoo
+addons_path = /home/daniel/projects/odoo/addons,/home/daniel/projects/odoo/addons
+
+; Configurações de logging
+logfile = /var/log/odoo/odoo.log
+log_level = info
+
+
+
+sudo nano /etc/systemd/system/odoo.service
+
+
+[Unit]
+Description=Odoo
+After=postgresql.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /home/daniel/projects/odoo/odoo-bin -c /etc/odoo.conf
+WorkingDirectory=/home/daniel/projects/odoo
+StandardOutput=journal
+StandardError=inherit
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+sudo systemctl daemon-reload
+
+
+sudo systemctl enable odoo
+
+
+sudo systemctl start odooO
+
+
+sudo systemctl status odoo
+
+
+sudo journalctl -u odoo -n 50
+
+
+
+
+
